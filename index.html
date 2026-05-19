@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
-  <title>New tab</title>
+  <title>New Tab</title>
 
   <style>
     :root {
@@ -86,7 +86,7 @@
       margin: 0 auto;
       display: grid;
       grid-template-columns: minmax(520px, 1fr) 430px;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto 1fr;
       gap: 24px;
       padding: 28px 0;
     }
@@ -281,7 +281,7 @@
 
     .nba-panel {
       grid-column: 2;
-      grid-row: 2 / span 2;
+      grid-row: 2;
       align-self: stretch;
       border-radius: var(--radius-xl);
       padding: 22px;
@@ -424,12 +424,23 @@
       line-height: 1.25;
     }
 
-    .team-code {
-      width: 42px;
-      flex: 0 0 auto;
-      color: rgba(255,255,255,0.72);
-      font-size: 0.84rem;
-      letter-spacing: 0.08em;
+    .team-logo {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+    }
+
+    .team-logo-fallback {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.10);
+      font-size: 1.2rem;
     }
 
     .team-full {
@@ -463,26 +474,6 @@
       font-size: 1rem;
     }
 
-    .footer-note {
-      grid-column: 1;
-      grid-row: 3;
-      align-self: end;
-      color: rgba(255,255,255,0.66);
-      font-size: 0.86rem;
-      padding-left: 8px;
-      text-shadow: 0 10px 24px rgba(0,0,0,0.55);
-    }
-
-    .footer-note a {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(255,255,255,0.30);
-    }
-
-    .footer-note a:hover {
-      color: rgba(255,255,255,0.94);
-    }
-
     .hidden {
       display: none !important;
     }
@@ -497,14 +488,13 @@
         min-height: 100vh;
         width: min(100%, calc(100vw - 32px));
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
+        grid-template-rows: auto auto auto;
         padding: 18px 0 28px;
       }
 
       .topbar,
       .hero,
-      .nba-panel,
-      .footer-note {
+      .nba-panel {
         grid-column: 1;
       }
 
@@ -531,11 +521,6 @@
       .nba-panel {
         grid-row: 3;
         max-height: min(680px, 64vh);
-      }
-
-      .footer-note {
-        grid-row: 4;
-        padding-bottom: 8px;
       }
 
       .search-hint {
@@ -586,21 +571,21 @@
       <section class="weather-card glass" aria-live="polite">
         <div class="weather-icon" id="weatherIcon">⌖</div>
         <div class="weather-copy">
-          <div class="weather-city" id="weatherCity">Localizando...</div>
-          <div class="weather-detail" id="weatherDetail">Buscando temperatura</div>
+          <div class="weather-city" id="weatherCity">Locating...</div>
+          <div class="weather-detail" id="weatherDetail">Loading temperature</div>
         </div>
       </section>
 
-      <button class="wallpaper-pill" id="wallpaperButton" type="button" title="Trocar wallpaper">
+      <button class="wallpaper-pill" id="wallpaperButton" type="button" title="Change wallpaper">
         <span aria-hidden="true">↻</span>
-        <span>Trocar wallpaper</span>
+        <span>Change wallpaper</span>
       </button>
     </header>
 
     <section class="hero">
       <div class="clock-block">
         <div class="clock" id="clock">00:00</div>
-        <div class="date" id="date">carregando data...</div>
+        <div class="date" id="date">loading date...</div>
       </div>
 
       <div class="search-wrap glass">
@@ -614,14 +599,14 @@
             type="search"
             autocomplete="off"
             spellcheck="false"
-            placeholder="Pesquisar no Google"
-            aria-label="Pesquisar no Google"
+            placeholder="Search Google"
+            aria-label="Search Google"
           />
         </form>
 
         <div class="search-hint" aria-hidden="true">
           <span class="keycap">/</span>
-          <span>focar</span>
+          <span>focus</span>
         </div>
       </div>
     </section>
@@ -629,19 +614,19 @@
     <aside class="nba-panel glass" aria-live="polite">
       <div class="nba-header">
         <div class="nba-title">
-          <h2>NBA hoje</h2>
-          <div class="nba-subtitle" id="nbaSubtitle">Carregando jogos...</div>
+          <h2>NBA today</h2>
+          <div class="nba-subtitle" id="nbaSubtitle">Loading games...</div>
         </div>
 
-        <button class="refresh-mini" id="refreshGames" type="button" title="Atualizar jogos">
+        <button class="refresh-mini" id="refreshGames" type="button" title="Refresh games">
           ↻
         </button>
       </div>
 
       <div class="games" id="games">
         <div class="state-card">
-          <strong>Buscando placares...</strong>
-          <span>A internet está executando seu ritual habitual de atrasar tudo.</span>
+          <strong>Loading scores...</strong>
+          <span>The internet is performing its usual ritual of making everything slower.</span>
         </div>
       </div>
     </aside>
@@ -674,8 +659,8 @@
     function loadWallpaper() {
       elements.wallpaper.classList.remove("is-ready");
 
-      // Picsum entrega uma foto aleatória a cada URL nova.
-      // As imagens são puxadas da coleção que o serviço disponibiliza.
+      // Picsum returns a different random image whenever the URL changes.
+      // This keeps the wallpaper fresh on each new tab.
       const url = `https://picsum.photos/1920/1080?random=${Date.now()}`;
 
       const image = new Image();
@@ -692,7 +677,7 @@
     }
 
     // =======
-    // Relógio
+    // Clock
     // =======
     function capitalizeFirst(text) {
       return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
@@ -701,14 +686,15 @@
     function updateClock() {
       const now = new Date();
 
-      elements.clock.textContent = now.toLocaleTimeString("pt-BR", {
+      elements.clock.textContent = now.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
-        second: "2-digit"
+        second: "2-digit",
+        hour12: false
       });
 
       elements.date.textContent = capitalizeFirst(
-        now.toLocaleDateString("pt-BR", {
+        now.toLocaleDateString("en-US", {
           weekday: "long",
           day: "2-digit",
           month: "long"
@@ -717,7 +703,7 @@
     }
 
     // =====================
-    // Atalhos de interação
+    // Keyboard shortcuts
     // =====================
     document.addEventListener("keydown", (event) => {
       if (event.key === "/" && document.activeElement !== elements.searchInput) {
@@ -730,42 +716,42 @@
       }
     });
 
-    // ======
-    // Clima
-    // ======
+    // =======
+    // Weather
+    // =======
     function weatherCodeToPresentation(code, isDay = 1) {
       const presentation = {
-        0: [isDay ? "☀️" : "🌙", "Céu limpo"],
-        1: [isDay ? "🌤️" : "☁️", "Predominantemente limpo"],
-        2: ["⛅", "Parcialmente nublado"],
-        3: ["☁️", "Nublado"],
-        45: ["🌫️", "Nevoeiro"],
-        48: ["🌫️", "Nevoeiro"],
-        51: ["🌦️", "Garoa leve"],
-        53: ["🌦️", "Garoa moderada"],
-        55: ["🌧️", "Garoa intensa"],
-        56: ["🌧️", "Garoa congelante"],
-        57: ["🌧️", "Garoa congelante"],
-        61: ["🌧️", "Chuva fraca"],
-        63: ["🌧️", "Chuva moderada"],
-        65: ["🌧️", "Chuva forte"],
-        66: ["🌧️", "Chuva congelante"],
-        67: ["🌧️", "Chuva congelante"],
-        71: ["🌨️", "Neve fraca"],
-        73: ["🌨️", "Neve moderada"],
-        75: ["❄️", "Neve forte"],
-        77: ["❄️", "Grãos de neve"],
-        80: ["🌦️", "Pancadas de chuva"],
-        81: ["🌧️", "Pancadas de chuva"],
-        82: ["⛈️", "Pancadas intensas"],
-        85: ["🌨️", "Pancadas de neve"],
-        86: ["🌨️", "Pancadas fortes de neve"],
-        95: ["⛈️", "Tempestade"],
-        96: ["⛈️", "Tempestade com granizo"],
-        99: ["⛈️", "Tempestade com granizo"]
+        0: [isDay ? "☀️" : "🌙", "Clear sky"],
+        1: [isDay ? "🌤️" : "☁️", "Mostly clear"],
+        2: ["⛅", "Partly cloudy"],
+        3: ["☁️", "Overcast"],
+        45: ["🌫️", "Fog"],
+        48: ["🌫️", "Fog"],
+        51: ["🌦️", "Light drizzle"],
+        53: ["🌦️", "Moderate drizzle"],
+        55: ["🌧️", "Heavy drizzle"],
+        56: ["🌧️", "Freezing drizzle"],
+        57: ["🌧️", "Freezing drizzle"],
+        61: ["🌧️", "Light rain"],
+        63: ["🌧️", "Moderate rain"],
+        65: ["🌧️", "Heavy rain"],
+        66: ["🌧️", "Freezing rain"],
+        67: ["🌧️", "Freezing rain"],
+        71: ["🌨️", "Light snow"],
+        73: ["🌨️", "Moderate snow"],
+        75: ["❄️", "Heavy snow"],
+        77: ["❄️", "Snow grains"],
+        80: ["🌦️", "Rain showers"],
+        81: ["🌧️", "Rain showers"],
+        82: ["⛈️", "Heavy rain showers"],
+        85: ["🌨️", "Snow showers"],
+        86: ["🌨️", "Heavy snow showers"],
+        95: ["⛈️", "Thunderstorm"],
+        96: ["⛈️", "Thunderstorm with hail"],
+        99: ["⛈️", "Thunderstorm with hail"]
       };
 
-      return presentation[code] || ["🌡️", "Condição atual"];
+      return presentation[code] || ["🌡️", "Current conditions"];
     }
 
     function saveCache(key, value) {
@@ -816,7 +802,7 @@
 
     async function resolveLocality(position) {
       const params = new URLSearchParams({
-        localityLanguage: "pt"
+        localityLanguage: "en"
       });
 
       if (position?.latitude != null && position?.longitude != null) {
@@ -829,13 +815,13 @@
       );
 
       if (!response.ok) {
-        throw new Error(`Localização indisponível (${response.status})`);
+        throw new Error(`Location unavailable (${response.status})`);
       }
 
       const data = await response.json();
 
       return {
-        city: data.city || data.locality || "Sua região",
+        city: data.city || data.locality || "Your area",
         subdivision: data.principalSubdivision || "",
         latitude: data.latitude,
         longitude: data.longitude
@@ -855,7 +841,7 @@
       );
 
       if (!response.ok) {
-        throw new Error(`Clima indisponível (${response.status})`);
+        throw new Error(`Weather unavailable (${response.status})`);
       }
 
       const data = await response.json();
@@ -887,9 +873,9 @@
       elements.weatherDetail.textContent = `${temperature} • ${description}`;
     }
 
-    function renderWeatherFallback(message = "Não consegui carregar o clima") {
+    function renderWeatherFallback(message = "Could not load weather") {
       elements.weatherIcon.textContent = "⌖";
-      elements.weatherCity.textContent = "Localização indisponível";
+      elements.weatherCity.textContent = "Location unavailable";
       elements.weatherDetail.textContent = message;
     }
 
@@ -911,14 +897,14 @@
         saveCache(caches.weather, weather);
       } catch (error) {
         if (!(cachedWeather && cachedCity)) {
-          renderWeatherFallback("Permita a localização ou tente novamente depois");
+          renderWeatherFallback("Allow location access or try again later");
         }
-        console.warn("Falha ao carregar clima:", error);
+        console.warn("Failed to load weather:", error);
       }
     }
 
     // ==========
-    // NBA placar
+    // NBA scores
     // ==========
     function formatTodayYYYYMMDD() {
       const now = new Date();
@@ -929,12 +915,12 @@
     }
 
     function formatLocalTime(dateValue) {
-      if (!dateValue) return "Horário a confirmar";
+      if (!dateValue) return "Time to be confirmed";
 
       const date = new Date(dateValue);
-      if (Number.isNaN(date.getTime())) return "Horário a confirmar";
+      if (Number.isNaN(date.getTime())) return "Time to be confirmed";
 
-      return date.toLocaleTimeString("pt-BR", {
+      return date.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit"
       });
@@ -958,14 +944,16 @@
 
       const statusType = event?.status?.type || {};
       const state = statusType.state || "pre";
-      const detail = statusType.shortDetail || statusType.detail || statusType.description || "Agendado";
+      const detail = statusType.shortDetail || statusType.detail || statusType.description || "Scheduled";
 
       return {
-        awayName: away?.team?.displayName || away?.team?.shortDisplayName || "Visitante",
+        awayName: away?.team?.displayName || away?.team?.shortDisplayName || "Away team",
         awayCode: away?.team?.abbreviation || "",
+        awayLogo: away?.team?.logo || "",
         awayScore: away?.score ?? "",
-        homeName: home?.team?.displayName || home?.team?.shortDisplayName || "Mandante",
+        homeName: home?.team?.displayName || home?.team?.shortDisplayName || "Home team",
         homeCode: home?.team?.abbreviation || "",
+        homeLogo: home?.team?.logo || "",
         homeScore: home?.score ?? "",
         status: detail,
         state,
@@ -973,8 +961,14 @@
       };
     }
 
+    function getOfficialNBALogoUrl(teamId) {
+      return teamId
+        ? `https://cdn.nba.com/logos/nba/${teamId}/primary/L/logo.svg`
+        : "";
+    }
+
     function normalizeNBACdnGame(game) {
-      const text = game?.gameStatusText || "Agendado";
+      const text = game?.gameStatusText || "Scheduled";
       const lower = text.toLowerCase();
 
       let state = "pre";
@@ -990,10 +984,10 @@
       }
 
       return {
-        awayName: [game?.awayTeam?.teamCity, game?.awayTeam?.teamName].filter(Boolean).join(" ") || "Visitante",
+        awayName: [game?.awayTeam?.teamCity, game?.awayTeam?.teamName].filter(Boolean).join(" ") || "Away team",
         awayCode: game?.awayTeam?.teamTricode || "",
         awayScore: game?.awayTeam?.score ?? "",
-        homeName: [game?.homeTeam?.teamCity, game?.homeTeam?.teamName].filter(Boolean).join(" ") || "Mandante",
+        homeName: [game?.homeTeam?.teamCity, game?.homeTeam?.teamName].filter(Boolean).join(" ") || "Home team",
         homeCode: game?.homeTeam?.teamTricode || "",
         homeScore: game?.homeTeam?.score ?? "",
         status: text,
@@ -1040,13 +1034,27 @@
       return escapeHTML(score);
     }
 
+    function logoMarkup(url, teamName) {
+      if (!url) {
+        return `<span class="team-logo-fallback" aria-hidden="true">🏀</span>`;
+      }
+
+      return `<img
+        class="team-logo"
+        src="${escapeHTML(url)}"
+        alt="${escapeHTML(teamName)} logo"
+        loading="lazy"
+        referrerpolicy="no-referrer"
+      />`;
+    }
+
     function renderGames(games) {
       if (!Array.isArray(games) || games.length === 0) {
-        elements.nbaSubtitle.textContent = "Nenhum jogo encontrado para hoje";
+        elements.nbaSubtitle.textContent = "No games found for today";
         elements.games.innerHTML = `
           <div class="state-card">
-            <strong>Sem jogos da NBA hoje.</strong>
-            <span>Ao menos os atletas têm folga. A humanidade, nem sempre.</span>
+            <strong>No NBA games today.</strong>
+            <span>At least the players get a day off. Humanity rarely does.</span>
           </div>
         `;
         return;
@@ -1059,7 +1067,7 @@
       });
 
       elements.nbaSubtitle.textContent =
-        games.length === 1 ? "1 jogo encontrado" : `${games.length} jogos encontrados`;
+        games.length === 1 ? "1 game found" : `${games.length} games found`;
 
       elements.games.innerHTML = games.map((game) => {
         const isLive = game.state === "in";
@@ -1067,8 +1075,8 @@
           game.state === "pre"
             ? formatLocalTime(game.timeUTC)
             : game.state === "post"
-              ? "Encerrado"
-              : "Ao vivo";
+              ? "Final"
+              : "Live";
 
         return `
           <article class="game-card">
@@ -1083,7 +1091,7 @@
             <div class="teams">
               <div class="team-row">
                 <div class="team-name">
-                  <span class="team-code">${escapeHTML(game.awayCode)}</span>
+                  ${logoMarkup(game.awayLogo, game.awayName)}
                   <span class="team-full">${escapeHTML(game.awayName)}</span>
                 </div>
                 <div class="team-score">${scoreDisplay(game.awayScore)}</div>
@@ -1091,7 +1099,7 @@
 
               <div class="team-row">
                 <div class="team-name">
-                  <span class="team-code">${escapeHTML(game.homeCode)}</span>
+                  ${logoMarkup(game.homeLogo, game.homeName)}
                   <span class="team-full">${escapeHTML(game.homeName)}</span>
                 </div>
                 <div class="team-score">${scoreDisplay(game.homeScore)}</div>
@@ -1103,21 +1111,21 @@
     }
 
     function renderGamesError() {
-      elements.nbaSubtitle.textContent = "Placar indisponível no momento";
+      elements.nbaSubtitle.textContent = "Scores are unavailable right now";
       elements.games.innerHTML = `
         <div class="state-card">
-          <strong>Não consegui carregar os jogos agora.</strong>
-          <span>Atualize daqui a pouco. O layout está pronto; as APIs é que às vezes resolvem agir como se fossem feitas de névoa.</span>
+          <strong>Could not load the games right now.</strong>
+          <span>Refresh again in a moment. The layout is ready; the APIs occasionally decide to behave like fog.</span>
         </div>
       `;
     }
 
     async function loadNBAGames() {
-      elements.nbaSubtitle.textContent = "Atualizando placar...";
+      elements.nbaSubtitle.textContent = "Refreshing scores...";
       elements.games.innerHTML = `
         <div class="state-card">
-          <strong>Buscando placares...</strong>
-          <span>Consultando as fontes disponíveis.</span>
+          <strong>Loading scores...</strong>
+          <span>Checking available sources.</span>
         </div>
       `;
 
@@ -1126,7 +1134,7 @@
         renderGames(espnGames);
         return;
       } catch (espnError) {
-        console.warn("Falha na fonte ESPN:", espnError);
+        console.warn("ESPN source failed:", espnError);
       }
 
       try {
@@ -1134,14 +1142,14 @@
         renderGames(nbaGames);
         return;
       } catch (nbaError) {
-        console.warn("Falha na fonte NBA CDN:", nbaError);
+        console.warn("NBA CDN source failed:", nbaError);
       }
 
       renderGamesError();
     }
 
     // ============
-    // Inicialização
+    // Initialization
     // ============
     loadWallpaper();
     updateClock();
