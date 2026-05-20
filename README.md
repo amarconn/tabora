@@ -1,4 +1,4 @@
-# NBA New Tab Dashboard
+# Tabora
 
 A custom browser new tab page with a clean, minimal dashboard layout inspired by modern start-page extensions, but built as a standalone HTML page that can be hosted anywhere.
 
