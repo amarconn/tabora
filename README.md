@@ -23,7 +23,7 @@ Live page:
 - **Responsive layout**
   - Works on desktop resolutions and adapts to narrower windows.
 
----
+
 
 ## Browser support
 
@@ -40,7 +40,7 @@ https://amarconn.github.io/new-tab/
 
 Then configure your browser's custom new tab extension to open that URL.
 
----
+
 
 ### Firefox setup
 
@@ -62,7 +62,7 @@ After installing it:
 
 This extension is especially useful because it can keep the address bar ready for typing instead of filling it with the page URL.
 
----
+
 
 ### Google Chrome setup
 
@@ -84,7 +84,7 @@ After installing it:
 3. Save the setting.
 4. Open a new tab.
 
----
+
 
 ### Microsoft Edge setup
 
@@ -103,7 +103,7 @@ https://amarconn.github.io/new-tab/
 
 as the page to open in new tabs.
 
----
+
 
 ### Brave setup
 
@@ -118,7 +118,7 @@ Brave supports Chrome Web Store extensions, so the Chrome instructions usually a
 
 3. Open a new tab.
 
----
+
 
 ### Vivaldi setup
 
@@ -133,7 +133,7 @@ Vivaldi also supports Chrome Web Store extensions.
 
 3. Open a new tab.
 
----
+
 
 ## Local hosting or self-hosting
 
@@ -146,7 +146,7 @@ The page can also be self-hosted on:
 
 For best reliability, use a hosted HTTPS version instead of opening the HTML file directly with `file://`.
 
----
+
 
 ## How the page works
 
@@ -185,7 +185,7 @@ If the primary score source is unavailable, the page tries a fallback source.
 Each new tab loads a new random high-resolution background image.  
 The user can also manually refresh the wallpaper with the dedicated button on the page.
 
----
+
 
 ## Customization
 
@@ -232,7 +232,7 @@ However, it does call third-party services in order to provide features:
 If location permission is granted, your browser may share approximate coordinates with the services used to resolve city name and weather.  
 Recent weather and city data may be cached locally in the browser using `localStorage`.
 
----
+
 
 ## Data and service dependencies
 
@@ -245,7 +245,7 @@ The page relies on external public services for dynamic content:
 
 If one of those services changes its API or temporarily becomes unavailable, the related widget may stop working until the page is updated. Such is life on the modern web, where "public endpoint" often means "working until it suddenly does not."
 
----
+
 
 ## License
 
