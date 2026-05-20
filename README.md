@@ -4,7 +4,7 @@ A custom browser new tab page with a clean, minimal dashboard layout inspired by
 
 Live page:
 
-- https://amarconn.github.io/new-tab/
+- https://amarconn.github.io/tabora/
 
 ## Features
 
@@ -35,7 +35,7 @@ The setup below covers the most common desktop browsers.
 Use this page URL:
 
 ```text
-https://amarconn.github.io/new-tab/
+https://amarconn.github.io/tabora/
 ```
 
 Then configure your browser's custom new tab extension to open that URL.
@@ -54,7 +54,7 @@ After installing it:
 2. Paste this URL into the custom new tab field:
 
    ```text
-   https://amarconn.github.io/new-tab/
+   https://amarconn.github.io/tabora/
    ```
 
 3. Save the setting.
@@ -78,7 +78,7 @@ After installing it:
 2. Set the new tab URL to:
 
    ```text
-   https://amarconn.github.io/new-tab/
+   https://amarconn.github.io/tabora/
    ```
 
 3. Save the setting.
@@ -98,7 +98,7 @@ One available option is:
 Then set:
 
 ```text
-https://amarconn.github.io/new-tab/
+https://amarconn.github.io/tabora/
 ```
 
 as the page to open in new tabs.
@@ -113,7 +113,7 @@ Brave supports Chrome Web Store extensions, so the Chrome instructions usually a
 2. Set the custom URL to:
 
    ```text
-   https://amarconn.github.io/new-tab/
+   https://amarconn.github.io/tabora/
    ```
 
 3. Open a new tab.
@@ -128,7 +128,7 @@ Vivaldi also supports Chrome Web Store extensions.
 2. Set the custom URL to:
 
    ```text
-   https://amarconn.github.io/new-tab/
+   https://amarconn.github.io/tabora/
    ```
 
 3. Open a new tab.
