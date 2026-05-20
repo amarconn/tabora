@@ -36,8 +36,6 @@ The setup below covers the most common desktop browsers.
 
 ## Recommended setup
 
-### Option 1: Use the hosted version
-
 Use this page URL:
 
 ```text
@@ -48,7 +46,7 @@ Then configure your browser's custom new tab extension to open that URL.
 
 ---
 
-## Firefox setup
+### Firefox setup
 
 For Firefox, the recommended extension is:
 
@@ -70,7 +68,7 @@ This extension is especially useful because it can keep the address bar ready fo
 
 ---
 
-## Google Chrome setup
+### Google Chrome setup
 
 Chrome does not provide a built-in setting to replace the new tab page with any URL, so an extension is required.
 
@@ -92,7 +90,7 @@ After installing it:
 
 ---
 
-## Microsoft Edge setup
+### Microsoft Edge setup
 
 Edge also needs a custom new tab extension.
 
@@ -111,7 +109,7 @@ as the page to open in new tabs.
 
 ---
 
-## Brave setup
+### Brave setup
 
 Brave supports Chrome Web Store extensions, so the Chrome instructions usually apply.
 
@@ -126,7 +124,7 @@ Brave supports Chrome Web Store extensions, so the Chrome instructions usually a
 
 ---
 
-## Vivaldi setup
+### Vivaldi setup
 
 Vivaldi also supports Chrome Web Store extensions.
 
