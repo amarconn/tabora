@@ -32,10 +32,6 @@ To use it as a **real new tab page**, you need a browser extension that can redi
 
 The setup below covers the most common desktop browsers.
 
----
-
-## Recommended setup
-
 Use this page URL:
 
 ```text
