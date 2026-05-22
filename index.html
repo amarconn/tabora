@@ -316,6 +316,94 @@
       font-size: 0.9rem;
     }
 
+    .custom-image-panel {
+      margin-top: 16px;
+      flex: 0 0 auto;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.09);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .custom-image-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    
+    .custom-image-title {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    
+    .custom-image-title strong {
+      font-size: 0.98rem;
+    }
+    
+    .custom-image-title span {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    
+    .custom-image-frame {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 18px;
+      border: 1px dashed rgba(255,255,255,0.26);
+      background: rgba(0,0,0,0.18);
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+    
+    .custom-image-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .custom-image-placeholder {
+      text-align: center;
+      color: rgba(255,255,255,0.68);
+      font-size: 0.9rem;
+      padding: 18px;
+      line-height: 1.45;
+    }
+    
+    .custom-image-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .custom-image-button {
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.10);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 14px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: background 160ms ease, transform 160ms ease;
+    }
+    
+    .custom-image-button:hover {
+      background: rgba(255,255,255,0.16);
+      transform: translateY(-1px);
+    }
+    
+    .custom-image-button.danger {
+      color: rgba(255,220,220,0.96);
+    }
+    
     .refresh-mini {
       width: 42px;
       height: 42px;
@@ -629,6 +717,45 @@
           <span>The internet is performing its usual ritual of making everything slower.</span>
         </div>
       </div>
+
+      <section class="custom-image-panel">
+        <div class="custom-image-header">
+          <div class="custom-image-title">
+            <strong>Custom image</strong>
+            <span>Saved only in this browser</span>
+          </div>
+        </div>
+      
+        <div class="custom-image-frame">
+          <img
+            id="customImagePreview"
+            class="custom-image-preview hidden"
+            alt="Custom user image"
+          />
+      
+          <div id="customImagePlaceholder" class="custom-image-placeholder">
+            Choose an image to keep it here.
+          </div>
+        </div>
+      
+        <div class="custom-image-actions">
+          <button class="custom-image-button" id="chooseCustomImage" type="button">
+            Choose image
+          </button>
+      
+          <button class="custom-image-button danger hidden" id="removeCustomImage" type="button">
+            Remove
+          </button>
+      
+          <input
+            id="customImageInput"
+            type="file"
+            accept="image/png, image/jpeg, image/webp, image/gif"
+            hidden
+          />
+        </div>
+      </section>
+      
     </aside>
 
   </main>
@@ -645,7 +772,12 @@
       weatherDetail: document.getElementById("weatherDetail"),
       games: document.getElementById("games"),
       nbaSubtitle: document.getElementById("nbaSubtitle"),
-      refreshGames: document.getElementById("refreshGames")
+      refreshGames: document.getElementById("refreshGames"),
+      customImagePreview: document.getElementById("customImagePreview"),
+      customImagePlaceholder: document.getElementById("customImagePlaceholder"),
+      chooseCustomImage: document.getElementById("chooseCustomImage"),
+      removeCustomImage: document.getElementById("removeCustomImage"),
+      customImageInput: document.getElementById("customImageInput")
     };
 
     const caches = {
@@ -1149,6 +1281,185 @@
       renderGamesError();
     }
 
+    // ===================
+    // Custom local image
+    // ===================
+    const customImageDBConfig = {
+      name: "tabora_custom_image_db",
+      version: 1,
+      store: "images",
+      key: "main_custom_image"
+    };
+    
+    let customImageObjectUrl = null;
+    
+    function openCustomImageDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(
+          customImageDBConfig.name,
+          customImageDBConfig.version
+        );
+    
+        request.onupgradeneeded = () => {
+          const db = request.result;
+    
+          if (!db.objectStoreNames.contains(customImageDBConfig.store)) {
+            db.createObjectStore(customImageDBConfig.store, {
+              keyPath: "id"
+            });
+          }
+        };
+    
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+    
+    async function saveCustomImage(file) {
+      const db = await openCustomImageDB();
+    
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(customImageDBConfig.store, "readwrite");
+        const store = transaction.objectStore(customImageDBConfig.store);
+    
+        store.put({
+          id: customImageDBConfig.key,
+          blob: file,
+          name: file.name,
+          type: file.type,
+          updatedAt: Date.now()
+        });
+    
+        transaction.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+    
+        transaction.onerror = () => {
+          db.close();
+          reject(transaction.error);
+        };
+      });
+    }
+    
+    async function loadCustomImage() {
+      const db = await openCustomImageDB();
+    
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(customImageDBConfig.store, "readonly");
+        const store = transaction.objectStore(customImageDBConfig.store);
+        const request = store.get(customImageDBConfig.key);
+    
+        request.onsuccess = () => {
+          db.close();
+          resolve(request.result || null);
+        };
+    
+        request.onerror = () => {
+          db.close();
+          reject(request.error);
+        };
+      });
+    }
+    
+    async function deleteCustomImage() {
+      const db = await openCustomImageDB();
+    
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction(customImageDBConfig.store, "readwrite");
+        const store = transaction.objectStore(customImageDBConfig.store);
+    
+        store.delete(customImageDBConfig.key);
+    
+        transaction.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+    
+        transaction.onerror = () => {
+          db.close();
+          reject(transaction.error);
+        };
+      });
+    }
+    
+    function showCustomImage(record) {
+      if (customImageObjectUrl) {
+        URL.revokeObjectURL(customImageObjectUrl);
+        customImageObjectUrl = null;
+      }
+    
+      if (!record || !record.blob) {
+        elements.customImagePreview.classList.add("hidden");
+        elements.customImagePreview.removeAttribute("src");
+        elements.customImagePlaceholder.classList.remove("hidden");
+        elements.removeCustomImage.classList.add("hidden");
+        return;
+      }
+    
+      customImageObjectUrl = URL.createObjectURL(record.blob);
+    
+      elements.customImagePreview.src = customImageObjectUrl;
+      elements.customImagePreview.classList.remove("hidden");
+      elements.customImagePlaceholder.classList.add("hidden");
+      elements.removeCustomImage.classList.remove("hidden");
+    }
+    
+    async function initCustomImage() {
+      try {
+        const savedImage = await loadCustomImage();
+        showCustomImage(savedImage);
+      } catch (error) {
+        console.warn("Could not load custom image:", error);
+      }
+    
+      elements.chooseCustomImage.addEventListener("click", () => {
+        elements.customImageInput.click();
+      });
+    
+      elements.customImageInput.addEventListener("change", async () => {
+        const file = elements.customImageInput.files?.[0];
+    
+        if (!file) return;
+    
+        if (!file.type.startsWith("image/")) {
+          alert("Please choose a valid image file.");
+          elements.customImageInput.value = "";
+          return;
+        }
+    
+        const maxSizeMB = 12;
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+    
+        if (file.size > maxSizeBytes) {
+          alert(`Please choose an image smaller than ${maxSizeMB} MB.`);
+          elements.customImageInput.value = "";
+          return;
+        }
+    
+        try {
+          await saveCustomImage(file);
+          const savedImage = await loadCustomImage();
+          showCustomImage(savedImage);
+        } catch (error) {
+          console.error("Could not save custom image:", error);
+          alert("Could not save this image in the browser.");
+        }
+    
+        elements.customImageInput.value = "";
+      });
+    
+      elements.removeCustomImage.addEventListener("click", async () => {
+        try {
+          await deleteCustomImage();
+          showCustomImage(null);
+        } catch (error) {
+          console.error("Could not remove custom image:", error);
+          alert("Could not remove the image.");
+        }
+      });
+    }
+    
     // ============
     // Initialization
     // ============
@@ -1156,6 +1467,7 @@
     updateClock();
     initWeather();
     loadNBAGames();
+    initCustomImage();
 
     setInterval(updateClock, 1000);
     setInterval(loadNBAGames, 60 * 1000);
