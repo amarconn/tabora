@@ -237,11 +237,21 @@
       font-size: .76rem;
     }
 
-    .nba-panel {
+    .right-column {
       grid-column: 2;
       grid-row: 2;
+      align-self: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
       min-height: 0;
-      align-self: stretch;
+    }
+    
+    .nba-panel {
+      width: 100%;
+      min-height: 0;
       border-radius: var(--radius-xl);
       padding: 22px;
       display: flex;
@@ -414,11 +424,11 @@
     }
 
     .custom-image-section {
-      margin-top: 14px;
       flex: 0 0 auto;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
+      width: 100%;
     }
 
     .custom-image-frame {
@@ -508,12 +518,19 @@
         padding: 18px 0 28px;
       }
 
-      .topbar, .hero, .nba-panel { grid-column: 1; }
+      .topbar, .hero, .right-column { grid-column: 1; }
       .topbar { align-items: stretch; flex-direction: column; }
       .weather { min-width: 0; max-width: none; width: 100%; }
       .wallpaper-btn { width: fit-content; }
       .hero { grid-row: 2; padding: 10px 0; }
-      .nba-panel { grid-row: 3; max-height: min(680px, 64vh); }
+      .right-column {
+        grid-row: 3;
+        width: 100%;
+      }
+      
+      .nba-panel {
+        max-height: min(680px, 64vh);
+      }
       .hint { display: none; }
     }
 
@@ -564,32 +581,68 @@
       </div>
     </section>
 
-    <aside class="nba-panel glass" aria-live="polite">
-      <div class="nba-header">
-        <div class="nba-title">
-          <h2>NBA today</h2>
-          <div class="nba-subtitle" id="nbaSubtitle">Loading games...</div>
+    <div class="right-column">
+      <aside class="nba-panel glass" aria-live="polite">
+        <div class="nba-header">
+          <div class="nba-title">
+            <h2>NBA today</h2>
+            <div class="nba-subtitle" id="nbaSubtitle">Loading games...</div>
+          </div>
+    
+          <button class="refresh" id="refreshGames" type="button" title="Refresh games">
+            ↻
+          </button>
         </div>
-        <button class="refresh" id="refreshGames" type="button" title="Refresh games">↻</button>
-      </div>
-
-      <div class="games" id="games">
-        <div class="state-card">
-          <strong>Loading scores...</strong>
-          <span>Checking available sources.</span>
+    
+        <div class="games" id="games">
+          <div class="state-card">
+            <strong>Loading scores...</strong>
+            <span>Checking available sources.</span>
+          </div>
         </div>
-      </div>
-
+      </aside>
+    
       <section class="custom-image-section" aria-label="Custom local image">
-        <div class="custom-image-frame" id="customImageFrame" role="button" tabindex="0" aria-label="Choose custom image">
-          <img id="customImagePreview" class="custom-image-preview hidden" alt="Custom user image" />
-          <span id="customImagePlaceholder" class="custom-image-placeholder" aria-hidden="true">+</span>
-          <button class="custom-image-remove hidden" id="removeCustomImage" type="button" aria-label="Remove custom image" title="Remove custom image">×</button>
+        <div
+          class="custom-image-frame"
+          id="customImageFrame"
+          role="button"
+          tabindex="0"
+          aria-label="Choose custom image"
+        >
+          <img
+            id="customImagePreview"
+            class="custom-image-preview hidden"
+            alt="Custom user image"
+          />
+    
+          <span
+            id="customImagePlaceholder"
+            class="custom-image-placeholder"
+            aria-hidden="true"
+          >
+            +
+          </span>
+    
+          <button
+            class="custom-image-remove hidden"
+            id="removeCustomImage"
+            type="button"
+            aria-label="Remove custom image"
+            title="Remove custom image"
+          >
+            ×
+          </button>
         </div>
-
-        <input id="customImageInput" type="file" accept="image/png, image/jpeg, image/webp, image/gif" hidden />
+    
+        <input
+          id="customImageInput"
+          type="file"
+          accept="image/png, image/jpeg, image/webp, image/gif"
+          hidden
+        />
       </section>
-    </aside>
+    </div>
   </main>
 
   <script>
