@@ -11,21 +11,21 @@ Live page:
 - **Google search bar**
   - Search directly from the page.
 - **Digital clock**
-  - Displays the current local time from the user's computer.
+  - Displays the current local time from the user's computer;
 - **Current city and temperature**
-  - Uses browser geolocation when permission is granted.
+  - Uses browser geolocation when permission is granted;
   - Falls back to an approximate location when precise location is unavailable.
 - **NBA games for the current day**
-  - Shows today's matchups, live status, team logos, and scores.
+  - Shows today's matchups, live status, team logos, and scores;
   - Game times are displayed using the user's local computer time zone.
 - **Random wallpaper on every new tab**
   - Loads a new high-resolution background image each time the page opens.
 - **Responsive layout**
   - Works on desktop resolutions and adapts to narrower windows.
 - **Custom local image card**
-  - Adds a small image card below the NBA scoreboard.
-  - The user can click the `+` button and choose an image directly from the new tab page.
-  - The selected image is saved locally in the browser and appears again when the page is reopened.
+  - Adds a small image card below the NBA scoreboard;
+  - The user can click the `+` button and choose an image directly from the new tab page;
+  - The selected image is saved locally in the browser and appears again when the page is reopened;
   - The image is not uploaded to GitHub or to this repository.
 
 
