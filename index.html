@@ -4,26 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="dark" />
-  <title>New Tab</title>
+  <title>Tabora</title>
 
   <style>
     :root {
-      --text: rgba(255, 255, 255, 0.96);
-      --muted: rgba(255, 255, 255, 0.72);
-      --soft: rgba(255, 255, 255, 0.16);
-      --panel: rgba(12, 18, 32, 0.44);
-      --panel-strong: rgba(12, 18, 32, 0.62);
-      --border: rgba(255, 255, 255, 0.16);
-      --shadow: 0 22px 70px rgba(0, 0, 0, 0.38);
-      --radius-xl: 28px;
-      --radius-lg: 22px;
-      --radius-md: 18px;
+      --text: rgba(255,255,255,.96);
+      --muted: rgba(255,255,255,.70);
+      --panel: rgba(15,23,42,.50);
+      --panel-soft: rgba(255,255,255,.09);
+      --border: rgba(255,255,255,.16);
+      --shadow: 0 24px 80px rgba(0,0,0,.42);
       --blur: blur(18px);
+      --radius-xl: 30px;
+      --radius-md: 20px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     html, body {
       width: 100%;
@@ -35,13 +31,7 @@
       background: #0f172a;
     }
 
-    body {
-      position: relative;
-    }
-
-    .wallpaper,
-    .overlay,
-    .grain {
+    .wallpaper, .overlay, .grain {
       position: fixed;
       inset: 0;
       pointer-events: none;
@@ -50,32 +40,26 @@
     .wallpaper {
       background-size: cover;
       background-position: center;
-      background-repeat: no-repeat;
       transform: scale(1.035);
       filter: saturate(1.08) contrast(1.04);
-      transition: opacity 700ms ease;
       opacity: 0;
+      transition: opacity 700ms ease;
     }
 
-    .wallpaper.is-ready {
-      opacity: 1;
-    }
+    .wallpaper.ready { opacity: 1; }
 
     .overlay {
       background:
-        radial-gradient(circle at top left, rgba(15, 23, 42, 0.20), transparent 42%),
-        radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.30), transparent 46%),
-        linear-gradient(180deg, rgba(2, 6, 23, 0.42) 0%, rgba(2, 6, 23, 0.58) 100%);
+        radial-gradient(circle at top left, rgba(15,23,42,.12), transparent 42%),
+        radial-gradient(circle at bottom right, rgba(15,23,42,.28), transparent 46%),
+        linear-gradient(180deg, rgba(2,6,23,.42), rgba(2,6,23,.62));
     }
 
     .grain {
-      opacity: 0.08;
+      opacity: .07;
       mix-blend-mode: soft-light;
-      background-image:
-        radial-gradient(rgba(255,255,255,0.9) 0.5px, transparent 0.8px),
-        radial-gradient(rgba(255,255,255,0.65) 0.5px, transparent 0.8px);
-      background-position: 0 0, 12px 12px;
-      background-size: 24px 24px;
+      background-image: radial-gradient(rgba(255,255,255,.9) .5px, transparent .8px);
+      background-size: 22px 22px;
     }
 
     .app {
@@ -84,11 +68,11 @@
       height: 100vh;
       width: min(1380px, calc(100vw - 56px));
       margin: 0 auto;
+      padding: 28px 0;
       display: grid;
       grid-template-columns: minmax(520px, 1fr) 430px;
       grid-template-rows: auto 1fr;
       gap: 24px;
-      padding: 28px 0;
     }
 
     .glass {
@@ -107,10 +91,10 @@
       gap: 18px;
     }
 
-    .weather-card {
+    .weather {
       min-height: 62px;
       min-width: 260px;
-      max-width: min(420px, 56vw);
+      max-width: min(430px, 56vw);
       padding: 14px 18px;
       border-radius: 999px;
       display: inline-flex;
@@ -121,23 +105,15 @@
     .weather-icon {
       width: 38px;
       height: 38px;
-      flex: 0 0 auto;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      font-size: 1.65rem;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    .weather-copy {
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+      background: rgba(255,255,255,.12);
+      font-size: 1.6rem;
+      flex: 0 0 auto;
     }
 
     .weather-city {
-      font-size: 0.98rem;
       font-weight: 650;
       white-space: nowrap;
       overflow: hidden;
@@ -145,40 +121,37 @@
     }
 
     .weather-detail {
-      font-size: 0.88rem;
+      margin-top: 2px;
       color: var(--muted);
+      font-size: .88rem;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .wallpaper-pill {
+    .wallpaper-btn {
+      height: 52px;
       border: 1px solid var(--border);
-      background: rgba(12, 18, 32, 0.32);
+      background: rgba(12,18,32,.34);
       color: var(--text);
       border-radius: 999px;
-      height: 52px;
       padding: 0 18px;
       display: inline-flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
       font: inherit;
-      font-weight: 600;
+      font-weight: 650;
       backdrop-filter: var(--blur);
       -webkit-backdrop-filter: var(--blur);
+      box-shadow: 0 16px 40px rgba(0,0,0,.25);
       transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
     }
 
-    .wallpaper-pill:hover {
+    .wallpaper-btn:hover {
       transform: translateY(-1px);
-      background: rgba(12, 18, 32, 0.48);
-      border-color: rgba(255, 255, 255, 0.26);
-    }
-
-    .wallpaper-pill:active {
-      transform: translateY(0);
+      background: rgba(12,18,32,.48);
+      border-color: rgba(255,255,255,.26);
     }
 
     .hero {
@@ -187,36 +160,30 @@
       align-self: center;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
       gap: 24px;
-      padding: 24px 0 24px 6px;
-    }
-
-    .clock-block {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      text-shadow: 0 14px 42px rgba(0, 0, 0, 0.55);
+      padding-left: 6px;
     }
 
     .clock {
       font-size: clamp(5rem, 11vw, 9.5rem);
-      line-height: 0.92;
-      letter-spacing: -0.07em;
+      line-height: .92;
+      letter-spacing: -.07em;
       font-weight: 720;
       font-variant-numeric: tabular-nums;
+      text-shadow: 0 14px 42px rgba(0,0,0,.55);
     }
 
     .date {
+      margin-left: 8px;
+      margin-top: 8px;
       font-size: clamp(1.1rem, 2vw, 1.45rem);
-      color: rgba(255, 255, 255, 0.88);
+      color: rgba(255,255,255,.88);
       font-weight: 520;
       text-transform: capitalize;
-      letter-spacing: 0.01em;
-      margin-left: 8px;
+      text-shadow: 0 14px 42px rgba(0,0,0,.55);
     }
 
-    .search-wrap {
+    .search {
       width: min(760px, 100%);
       padding: 10px;
       border-radius: 999px;
@@ -228,172 +195,85 @@
     .search-icon {
       width: 46px;
       height: 46px;
-      flex: 0 0 auto;
+      border-radius: 50%;
       display: grid;
       place-items: center;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.10);
+      background: rgba(255,255,255,.10);
       font-size: 1.15rem;
+      flex: 0 0 auto;
     }
 
-    .search-form {
-      width: 100%;
-      display: flex;
-      align-items: center;
-    }
+    .search form { width: 100%; }
 
-    .search-input {
+    .search input {
       width: 100%;
       height: 48px;
-      border: none;
-      outline: none;
+      border: 0;
+      outline: 0;
       color: var(--text);
       background: transparent;
       font: inherit;
       font-size: 1.08rem;
-      padding: 0 12px 0 2px;
     }
 
-    .search-input::placeholder {
-      color: rgba(255, 255, 255, 0.70);
-    }
+    .search input::placeholder { color: rgba(255,255,255,.70); }
 
-    .search-hint {
+    .hint {
       display: inline-flex;
-      align-items: center;
       gap: 6px;
-      color: rgba(255, 255, 255, 0.64);
-      font-size: 0.82rem;
-      margin-left: 16px;
+      align-items: center;
+      color: rgba(255,255,255,.64);
+      font-size: .82rem;
       padding-left: 18px;
-      border-left: 1px solid rgba(255, 255, 255, 0.14);
+      border-left: 1px solid rgba(255,255,255,.14);
       white-space: nowrap;
     }
 
     .keycap {
       padding: 2px 8px;
       border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.20);
-      background: rgba(255,255,255,0.08);
-      font-size: 0.76rem;
-      color: rgba(255,255,255,0.80);
+      border: 1px solid rgba(255,255,255,.20);
+      background: rgba(255,255,255,.08);
+      font-size: .76rem;
     }
 
     .nba-panel {
       grid-column: 2;
       grid-row: 2;
+      min-height: 0;
       align-self: stretch;
       border-radius: var(--radius-xl);
       padding: 22px;
       display: flex;
       flex-direction: column;
-      min-height: 0;
     }
 
     .nba-header {
       display: flex;
-      align-items: start;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
       margin-bottom: 18px;
-    }
-
-    .nba-title {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
     }
 
     .nba-title h2 {
       margin: 0;
       font-size: 1.3rem;
       line-height: 1.2;
-      letter-spacing: -0.02em;
+      letter-spacing: -.02em;
     }
 
     .nba-subtitle {
+      margin-top: 4px;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: .9rem;
     }
 
-    .custom-image-panel {
-      margin-top: 12px;
-      flex: 0 0 auto;
-      border-radius: var(--radius-md);
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.09);
-      padding: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-    }
-    
-    .custom-image-header {
-      display: none;
-    }
-    
-    .custom-image-frame {
-      width: 135px;
-      height: 250px;
-      border-radius: 18px;
-      border: 1px dashed rgba(255,255,255,0.30);
-      background: rgba(0,0,0,0.18);
-      overflow: hidden;
-      display: grid;
-      place-items: center;
-      position: relative;
-      cursor: pointer;
-      padding: 0;
-    }
-    
-    .custom-image-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    
-    .custom-image-placeholder {
-      color: rgba(255,255,255,0.78);
-      font-size: 2.4rem;
-      font-weight: 300;
-      line-height: 1;
-      user-select: none;
-    }
-    
-    .custom-image-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    .custom-image-button {
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.10);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 8px 13px;
-      cursor: pointer;
-      font: inherit;
-      font-size: 0.84rem;
-      font-weight: 600;
-      transition: background 160ms ease, transform 160ms ease;
-    }
-    
-    .custom-image-button:hover {
-      background: rgba(255,255,255,0.16);
-      transform: translateY(-1px);
-    }
-    
-    .custom-image-button.danger {
-      color: rgba(255,220,220,0.96);
-    }
-    
-    .refresh-mini {
+    .refresh {
       width: 42px;
       height: 42px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
       color: var(--text);
       border-radius: 50%;
       cursor: pointer;
@@ -404,9 +284,9 @@
       transition: transform 160ms ease, background 160ms ease;
     }
 
-    .refresh-mini:hover {
+    .refresh:hover {
       transform: rotate(12deg);
-      background: rgba(255,255,255,0.14);
+      background: rgba(255,255,255,.14);
     }
 
     .games {
@@ -419,20 +299,13 @@
       gap: 12px;
     }
 
-    .games::-webkit-scrollbar {
-      width: 8px;
-    }
+    .games::-webkit-scrollbar { width: 8px; }
+    .games::-webkit-scrollbar-thumb { background: rgba(255,255,255,.20); border-radius: 999px; }
 
-    .games::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.20);
-      border-radius: 999px;
-    }
-
-    .game-card,
-    .state-card {
+    .game-card, .state-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--panel-soft);
       padding: 16px;
     }
 
@@ -447,20 +320,20 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      font-size: 0.84rem;
       color: var(--muted);
+      font-size: .84rem;
     }
 
     .status-chip {
-      max-width: 60%;
+      max-width: 62%;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: rgba(255,255,255,0.88);
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.14);
+      color: rgba(255,255,255,.88);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -470,9 +343,9 @@
       width: 8px;
       height: 8px;
       flex: 0 0 auto;
-      border-radius: 999px;
+      border-radius: 50%;
       background: #ef4444;
-      box-shadow: 0 0 0 6px rgba(239,68,68,0.14);
+      box-shadow: 0 0 0 6px rgba(239,68,68,.14);
     }
 
     .teams {
@@ -493,27 +366,26 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 640;
+      font-weight: 650;
       line-height: 1.25;
     }
 
+    .team-logo, .team-logo-fallback {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 30px;
+    }
+
     .team-logo {
-      width: 28px;
-      height: 28px;
-      flex: 0 0 28px;
       object-fit: contain;
-      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.28));
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,.28));
     }
 
     .team-logo-fallback {
-      width: 28px;
-      height: 28px;
-      flex: 0 0 28px;
       display: grid;
       place-items: center;
       border-radius: 50%;
-      background: rgba(255,255,255,0.10);
-      font-size: 1.2rem;
+      background: rgba(255,255,255,.10);
     }
 
     .team-full {
@@ -523,38 +395,109 @@
     }
 
     .team-score {
-      font-size: 1.55rem;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -0.03em;
       min-width: 2ch;
       text-align: right;
+      font-size: 1.55rem;
+      font-weight: 730;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -.03em;
     }
 
-    .muted-score {
-      color: rgba(255,255,255,0.54);
-    }
+    .muted-score { color: rgba(255,255,255,.54); }
 
     .state-card {
-      color: rgba(255,255,255,0.86);
+      color: rgba(255,255,255,.86);
       line-height: 1.5;
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    .state-card strong {
-      font-size: 1rem;
+    .custom-image-section {
+      margin-top: 14px;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
     }
 
-    .hidden {
-      display: none !important;
+    .custom-image-frame {
+      width: 135px;
+      height: 135px;
+      border: 1px dashed rgba(255,255,255,.32);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.78);
+      border-radius: 22px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      position: relative;
+      cursor: pointer;
+      padding: 0;
+      transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
     }
+
+    .custom-image-frame:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.46);
+    }
+
+    .custom-image-frame.has-image {
+      border: none;
+      background: transparent;
+    }
+
+    .custom-image-frame.has-image:hover { background: transparent; }
+
+    .custom-image-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .custom-image-placeholder {
+      font-size: 2.8rem;
+      line-height: 1;
+      font-weight: 300;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .custom-image-remove {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 24px;
+      height: 24px;
+      border: 1px solid rgba(255,255,255,.32);
+      border-radius: 50%;
+      background: rgba(0,0,0,.54);
+      color: rgba(255,255,255,.94);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font: inherit;
+      font-size: 1rem;
+      line-height: 1;
+      opacity: 0;
+      transform: scale(.92);
+      transition: opacity 140ms ease, transform 140ms ease, background 140ms ease;
+      z-index: 2;
+    }
+
+    .custom-image-frame.has-image:hover .custom-image-remove,
+    .custom-image-remove:focus-visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .custom-image-remove:hover { background: rgba(0,0,0,.72); }
+    .hidden { display: none !important; }
 
     @media (max-width: 1120px) {
-      html, body {
-        overflow: auto;
-      }
+      html, body { overflow: auto; }
 
       .app {
         height: auto;
@@ -565,71 +508,22 @@
         padding: 18px 0 28px;
       }
 
-      .topbar,
-      .hero,
-      .nba-panel {
-        grid-column: 1;
-      }
-
-      .topbar {
-        align-items: stretch;
-        flex-direction: column;
-      }
-
-      .weather-card {
-        min-width: 0;
-        max-width: none;
-        width: 100%;
-      }
-
-      .wallpaper-pill {
-        width: fit-content;
-      }
-
-      .hero {
-        grid-row: 2;
-        padding: 10px 0;
-      }
-
-      .nba-panel {
-        grid-row: 3;
-        max-height: min(680px, 64vh);
-      }
-
-      .search-hint {
-        display: none;
-      }
+      .topbar, .hero, .nba-panel { grid-column: 1; }
+      .topbar { align-items: stretch; flex-direction: column; }
+      .weather { min-width: 0; max-width: none; width: 100%; }
+      .wallpaper-btn { width: fit-content; }
+      .hero { grid-row: 2; padding: 10px 0; }
+      .nba-panel { grid-row: 3; max-height: min(680px, 64vh); }
+      .hint { display: none; }
     }
 
     @media (max-width: 640px) {
-      .app {
-        width: min(100%, calc(100vw - 24px));
-      }
-
-      .clock {
-        font-size: clamp(4.1rem, 19vw, 6.5rem);
-      }
-
-      .date {
-        margin-left: 4px;
-      }
-
-      .search-wrap {
-        border-radius: 28px;
-      }
-
-      .team-full {
-        white-space: normal;
-      }
-
-      .game-topline {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .status-chip {
-        max-width: 100%;
-      }
+      .app { width: min(100%, calc(100vw - 24px)); }
+      .clock { font-size: clamp(4.1rem, 19vw, 6.5rem); }
+      .search { border-radius: 28px; }
+      .team-full { white-space: normal; }
+      .game-topline { align-items: flex-start; flex-direction: column; }
+      .status-chip { max-width: 100%; }
     }
   </style>
 </head>
@@ -641,46 +535,32 @@
 
   <main class="app">
     <header class="topbar">
-      <section class="weather-card glass" aria-live="polite">
+      <section class="weather glass" aria-live="polite">
         <div class="weather-icon" id="weatherIcon">⌖</div>
-        <div class="weather-copy">
+        <div>
           <div class="weather-city" id="weatherCity">Locating...</div>
           <div class="weather-detail" id="weatherDetail">Loading temperature</div>
         </div>
       </section>
 
-      <button class="wallpaper-pill" id="wallpaperButton" type="button" title="Change wallpaper">
+      <button class="wallpaper-btn" id="wallpaperButton" type="button" title="Change wallpaper">
         <span aria-hidden="true">↻</span>
         <span>Change wallpaper</span>
       </button>
     </header>
 
     <section class="hero">
-      <div class="clock-block">
-        <div class="clock" id="clock">00:00</div>
+      <div>
+        <div class="clock" id="clock">00:00:00</div>
         <div class="date" id="date">loading date...</div>
       </div>
 
-      <div class="search-wrap glass">
+      <div class="search glass">
         <div class="search-icon" aria-hidden="true">⌕</div>
-
-        <form class="search-form" action="https://www.google.com/search" method="GET">
-          <input
-            class="search-input"
-            id="searchInput"
-            name="q"
-            type="search"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="Search Google"
-            aria-label="Search Google"
-          />
+        <form action="https://www.google.com/search" method="GET">
+          <input id="searchInput" name="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search Google" aria-label="Search Google" />
         </form>
-
-        <div class="search-hint" aria-hidden="true">
-          <span class="keycap">/</span>
-          <span>focus</span>
-        </div>
+        <div class="hint" aria-hidden="true"><span class="keycap">/</span><span>focus</span></div>
       </div>
     </section>
 
@@ -690,53 +570,26 @@
           <h2>NBA today</h2>
           <div class="nba-subtitle" id="nbaSubtitle">Loading games...</div>
         </div>
-
-        <button class="refresh-mini" id="refreshGames" type="button" title="Refresh games">
-          ↻
-        </button>
+        <button class="refresh" id="refreshGames" type="button" title="Refresh games">↻</button>
       </div>
 
       <div class="games" id="games">
         <div class="state-card">
           <strong>Loading scores...</strong>
-          <span>The internet is performing its usual ritual of making everything slower.</span>
+          <span>Checking available sources.</span>
         </div>
       </div>
 
-      <section class="custom-image-panel">
-        <button
-          class="custom-image-frame"
-          id="chooseCustomImage"
-          type="button"
-          aria-label="Choose custom image"
-        >
-          <img
-            id="customImagePreview"
-            class="custom-image-preview hidden"
-            alt="Custom user image"
-          />
-      
-          <div id="customImagePlaceholder" class="custom-image-placeholder">
-            +
-          </div>
-        </button>
-      
-        <div class="custom-image-actions">
-          <button class="custom-image-button danger hidden" id="removeCustomImage" type="button">
-            Remove
-          </button>
-      
-          <input
-            id="customImageInput"
-            type="file"
-            accept="image/png, image/jpeg, image/webp, image/gif"
-            hidden
-          />
+      <section class="custom-image-section" aria-label="Custom local image">
+        <div class="custom-image-frame" id="customImageFrame" role="button" tabindex="0" aria-label="Choose custom image">
+          <img id="customImagePreview" class="custom-image-preview hidden" alt="Custom user image" />
+          <span id="customImagePlaceholder" class="custom-image-placeholder" aria-hidden="true">+</span>
+          <button class="custom-image-remove hidden" id="removeCustomImage" type="button" aria-label="Remove custom image" title="Remove custom image">×</button>
         </div>
-      </section>
-      
-    </aside>
 
+        <input id="customImageInput" type="file" accept="image/png, image/jpeg, image/webp, image/gif" hidden />
+      </section>
+    </aside>
   </main>
 
   <script>
@@ -752,46 +605,34 @@
       games: document.getElementById("games"),
       nbaSubtitle: document.getElementById("nbaSubtitle"),
       refreshGames: document.getElementById("refreshGames"),
+      customImageFrame: document.getElementById("customImageFrame"),
       customImagePreview: document.getElementById("customImagePreview"),
       customImagePlaceholder: document.getElementById("customImagePlaceholder"),
-      chooseCustomImage: document.getElementById("chooseCustomImage"),
       removeCustomImage: document.getElementById("removeCustomImage"),
       customImageInput: document.getElementById("customImageInput")
     };
 
     const caches = {
-      weather: "newtab_weather_cache_v1",
-      city: "newtab_city_cache_v1"
+      city: "tabora_city_cache_v1",
+      weather: "tabora_weather_cache_v1"
     };
 
-    // ==========
-    // Wallpaper
-    // ==========
     function loadWallpaper() {
-      elements.wallpaper.classList.remove("is-ready");
-
-      // Picsum returns a different random image whenever the URL changes.
-      // This keeps the wallpaper fresh on each new tab.
+      elements.wallpaper.classList.remove("ready");
       const url = `https://picsum.photos/1920/1080?random=${Date.now()}`;
+      const img = new Image();
 
-      const image = new Image();
-      image.onload = () => {
+      img.onload = () => {
         elements.wallpaper.style.backgroundImage = `url("${url}")`;
-        elements.wallpaper.classList.add("is-ready");
+        elements.wallpaper.classList.add("ready");
       };
-      image.onerror = () => {
-        elements.wallpaper.style.backgroundImage =
-          "linear-gradient(135deg, #0f172a 0%, #1e293b 48%, #334155 100%)";
-        elements.wallpaper.classList.add("is-ready");
-      };
-      image.src = url;
-    }
 
-    // =======
-    // Clock
-    // =======
-    function capitalizeFirst(text) {
-      return text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
+      img.onerror = () => {
+        elements.wallpaper.style.backgroundImage = "linear-gradient(135deg, #0f172a, #1e293b, #334155)";
+        elements.wallpaper.classList.add("ready");
+      };
+
+      img.src = url;
     }
 
     function updateClock() {
@@ -804,18 +645,15 @@
         hour12: false
       });
 
-      elements.date.textContent = capitalizeFirst(
-        now.toLocaleDateString("en-US", {
-          weekday: "long",
-          day: "2-digit",
-          month: "long"
-        })
-      );
+      const dateText = now.toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long"
+      });
+
+      elements.date.textContent = dateText.charAt(0).toUpperCase() + dateText.slice(1);
     }
 
-    // =====================
-    // Keyboard shortcuts
-    // =====================
     document.addEventListener("keydown", (event) => {
       if (event.key === "/" && document.activeElement !== elements.searchInput) {
         event.preventDefault();
@@ -827,11 +665,26 @@
       }
     });
 
-    // =======
-    // Weather
-    // =======
-    function weatherCodeToPresentation(code, isDay = 1) {
-      const presentation = {
+    function saveCache(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify({ savedAt: Date.now(), value }));
+      } catch (_) {}
+    }
+
+    function readCache(key, maxAgeMs) {
+      try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (!parsed?.savedAt || Date.now() - parsed.savedAt > maxAgeMs) return null;
+        return parsed.value;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function weatherCode(code, isDay = 1) {
+      const data = {
         0: [isDay ? "☀️" : "🌙", "Clear sky"],
         1: [isDay ? "🌤️" : "☁️", "Mostly clear"],
         2: ["⛅", "Partly cloudy"],
@@ -841,93 +694,45 @@
         51: ["🌦️", "Light drizzle"],
         53: ["🌦️", "Moderate drizzle"],
         55: ["🌧️", "Heavy drizzle"],
-        56: ["🌧️", "Freezing drizzle"],
-        57: ["🌧️", "Freezing drizzle"],
         61: ["🌧️", "Light rain"],
         63: ["🌧️", "Moderate rain"],
         65: ["🌧️", "Heavy rain"],
-        66: ["🌧️", "Freezing rain"],
-        67: ["🌧️", "Freezing rain"],
         71: ["🌨️", "Light snow"],
         73: ["🌨️", "Moderate snow"],
         75: ["❄️", "Heavy snow"],
-        77: ["❄️", "Snow grains"],
         80: ["🌦️", "Rain showers"],
         81: ["🌧️", "Rain showers"],
         82: ["⛈️", "Heavy rain showers"],
-        85: ["🌨️", "Snow showers"],
-        86: ["🌨️", "Heavy snow showers"],
         95: ["⛈️", "Thunderstorm"],
         96: ["⛈️", "Thunderstorm with hail"],
         99: ["⛈️", "Thunderstorm with hail"]
       };
 
-      return presentation[code] || ["🌡️", "Current conditions"];
+      return data[code] || ["🌡️", "Current conditions"];
     }
 
-    function saveCache(key, value) {
-      try {
-        localStorage.setItem(key, JSON.stringify({
-          savedAt: Date.now(),
-          value
-        }));
-      } catch (_) {}
-    }
-
-    function readCache(key, maxAgeMs) {
-      try {
-        const raw = localStorage.getItem(key);
-        if (!raw) return null;
-
-        const parsed = JSON.parse(raw);
-        if (!parsed?.savedAt || Date.now() - parsed.savedAt > maxAgeMs) return null;
-        return parsed.value;
-      } catch (_) {
-        return null;
-      }
-    }
-
-    function requestBrowserPosition() {
+    function requestPosition() {
       return new Promise((resolve) => {
-        if (!("geolocation" in navigator)) {
-          resolve(null);
-          return;
-        }
+        if (!("geolocation" in navigator)) return resolve(null);
 
         navigator.geolocation.getCurrentPosition(
-          (position) => {
-            resolve({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            });
-          },
+          (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude }),
           () => resolve(null),
-          {
-            enableHighAccuracy: false,
-            timeout: 7000,
-            maximumAge: 30 * 60 * 1000
-          }
+          { enableHighAccuracy: false, timeout: 7000, maximumAge: 30 * 60 * 1000 }
         );
       });
     }
 
     async function resolveLocality(position) {
-      const params = new URLSearchParams({
-        localityLanguage: "en"
-      });
+      const params = new URLSearchParams({ localityLanguage: "en" });
 
       if (position?.latitude != null && position?.longitude != null) {
         params.set("latitude", position.latitude);
         params.set("longitude", position.longitude);
       }
 
-      const response = await fetch(
-        `https://api.bigdatacloud.net/data/reverse-geocode-client?${params.toString()}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Location unavailable (${response.status})`);
-      }
+      const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?${params.toString()}`);
+      if (!response.ok) throw new Error(`Location unavailable (${response.status})`);
 
       const data = await response.json();
 
@@ -939,7 +744,7 @@
       };
     }
 
-    async function fetchCurrentWeather(latitude, longitude) {
+    async function fetchWeather(latitude, longitude) {
       const params = new URLSearchParams({
         latitude,
         longitude,
@@ -947,13 +752,8 @@
         timezone: "auto"
       });
 
-      const response = await fetch(
-        `https://api.open-meteo.com/v1/forecast?${params.toString()}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`Weather unavailable (${response.status})`);
-      }
+      const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params.toString()}`);
+      if (!response.ok) throw new Error(`Weather unavailable (${response.status})`);
 
       const data = await response.json();
 
@@ -965,77 +765,42 @@
     }
 
     function renderWeather(locality, weather) {
-      const [icon, description] = weatherCodeToPresentation(
-        Number(weather.weatherCode),
-        Number(weather.isDay)
-      );
-
-      const cityText = locality.subdivision
-        ? `${locality.city}, ${locality.subdivision}`
-        : locality.city;
-
-      const temperature =
-        Number.isFinite(Number(weather.temperature))
-          ? `${Math.round(Number(weather.temperature))}°C`
-          : "--°C";
+      const [icon, description] = weatherCode(Number(weather.weatherCode), Number(weather.isDay));
+      const city = locality.subdivision ? `${locality.city}, ${locality.subdivision}` : locality.city;
+      const temp = Number.isFinite(Number(weather.temperature)) ? `${Math.round(Number(weather.temperature))}°C` : "--°C";
 
       elements.weatherIcon.textContent = icon;
-      elements.weatherCity.textContent = cityText;
-      elements.weatherDetail.textContent = `${temperature} • ${description}`;
-    }
-
-    function renderWeatherFallback(message = "Could not load weather") {
-      elements.weatherIcon.textContent = "⌖";
-      elements.weatherCity.textContent = "Location unavailable";
-      elements.weatherDetail.textContent = message;
+      elements.weatherCity.textContent = city;
+      elements.weatherDetail.textContent = `${temp} • ${description}`;
     }
 
     async function initWeather() {
-      const cachedWeather = readCache(caches.weather, 15 * 60 * 1000);
       const cachedCity = readCache(caches.city, 24 * 60 * 60 * 1000);
+      const cachedWeather = readCache(caches.weather, 15 * 60 * 1000);
 
-      if (cachedWeather && cachedCity) {
-        renderWeather(cachedCity, cachedWeather);
-      }
+      if (cachedCity && cachedWeather) renderWeather(cachedCity, cachedWeather);
 
       try {
-        const browserPosition = await requestBrowserPosition();
-        const locality = await resolveLocality(browserPosition);
-        const weather = await fetchCurrentWeather(locality.latitude, locality.longitude);
+        const position = await requestPosition();
+        const locality = await resolveLocality(position);
+        const weather = await fetchWeather(locality.latitude, locality.longitude);
 
         renderWeather(locality, weather);
         saveCache(caches.city, locality);
         saveCache(caches.weather, weather);
       } catch (error) {
-        if (!(cachedWeather && cachedCity)) {
-          renderWeatherFallback("Allow location access or try again later");
+        if (!(cachedCity && cachedWeather)) {
+          elements.weatherIcon.textContent = "⌖";
+          elements.weatherCity.textContent = "Location unavailable";
+          elements.weatherDetail.textContent = "Allow location access or try again later";
         }
         console.warn("Failed to load weather:", error);
       }
     }
 
-    // ==========
-    // NBA scores
-    // ==========
-    function formatTodayYYYYMMDD() {
+    function todayYYYYMMDD() {
       const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, "0");
-      const dd = String(now.getDate()).padStart(2, "0");
-      return `${yyyy}${mm}${dd}`;
-    }
-
-    function formatLocalTime(dateValue) {
-      if (!dateValue) return "Time to be confirmed";
-
-      const date = new Date(dateValue);
-      if (Number.isNaN(date.getTime())) return "Time to be confirmed";
-
-      return date.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        timeZoneName: "short"
-      });
+      return `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
     }
 
     function escapeHTML(value) {
@@ -1047,60 +812,55 @@
         .replaceAll("'", "&#039;");
     }
 
+    function formatLocalTime(value) {
+      if (!value) return "Time to be confirmed";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "Time to be confirmed";
+
+      return date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short"
+      });
+    }
+
     function normalizeESPNGame(event) {
       const competition = event?.competitions?.[0];
       const competitors = competition?.competitors || [];
-
       const home = competitors.find((team) => team.homeAway === "home") || {};
       const away = competitors.find((team) => team.homeAway === "away") || {};
-
-      const statusType = event?.status?.type || {};
-      const state = statusType.state || "pre";
-      const detail = statusType.shortDetail || statusType.detail || statusType.description || "Scheduled";
+      const status = event?.status?.type || {};
 
       return {
         awayName: away?.team?.displayName || away?.team?.shortDisplayName || "Away team",
-        awayCode: away?.team?.abbreviation || "",
         awayLogo: away?.team?.logo || "",
         awayScore: away?.score ?? "",
         homeName: home?.team?.displayName || home?.team?.shortDisplayName || "Home team",
-        homeCode: home?.team?.abbreviation || "",
         homeLogo: home?.team?.logo || "",
         homeScore: home?.score ?? "",
-        status: detail,
-        state,
+        status: status.shortDetail || status.detail || status.description || "Scheduled",
+        state: status.state || "pre",
         timeUTC: event?.date || null
       };
     }
 
-    function getOfficialNBALogoUrl(teamId) {
-      return teamId
-        ? `https://cdn.nba.com/logos/nba/${teamId}/primary/L/logo.svg`
-        : "";
+    function officialNBALogo(teamId) {
+      return teamId ? `https://cdn.nba.com/logos/nba/${teamId}/primary/L/logo.svg` : "";
     }
 
     function normalizeNBACdnGame(game) {
       const text = game?.gameStatusText || "Scheduled";
       const lower = text.toLowerCase();
-
       let state = "pre";
       if (lower.includes("final")) state = "post";
-      if (
-        lower.includes("qtr") ||
-        lower.includes("quarter") ||
-        lower.includes("halftime") ||
-        lower.includes("live") ||
-        game?.gameStatus === 2
-      ) {
-        state = "in";
-      }
+      if (lower.includes("qtr") || lower.includes("quarter") || lower.includes("halftime") || game?.gameStatus === 2) state = "in";
 
       return {
         awayName: [game?.awayTeam?.teamCity, game?.awayTeam?.teamName].filter(Boolean).join(" ") || "Away team",
-        awayCode: game?.awayTeam?.teamTricode || "",
+        awayLogo: officialNBALogo(game?.awayTeam?.teamId),
         awayScore: game?.awayTeam?.score ?? "",
         homeName: [game?.homeTeam?.teamCity, game?.homeTeam?.teamName].filter(Boolean).join(" ") || "Home team",
-        homeCode: game?.homeTeam?.teamTricode || "",
+        homeLogo: officialNBALogo(game?.homeTeam?.teamId),
         homeScore: game?.homeTeam?.score ?? "",
         status: text,
         state,
@@ -1109,55 +869,27 @@
     }
 
     async function fetchGamesFromESPN() {
-      const date = formatTodayYYYYMMDD();
-      const response = await fetch(
-        `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${date}`
-      );
-
-      if (!response.ok) {
-        throw new Error(`ESPN respondeu ${response.status}`);
-      }
-
+      const response = await fetch(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${todayYYYYMMDD()}`);
+      if (!response.ok) throw new Error(`ESPN returned ${response.status}`);
       const data = await response.json();
-      const events = Array.isArray(data?.events) ? data.events : [];
-
-      return events.map(normalizeESPNGame);
+      return (Array.isArray(data?.events) ? data.events : []).map(normalizeESPNGame);
     }
 
     async function fetchGamesFromNBACdn() {
-      const response = await fetch(
-        "https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json"
-      );
-
-      if (!response.ok) {
-        throw new Error(`NBA respondeu ${response.status}`);
-      }
-
+      const response = await fetch("https://cdn.nba.com/static/json/liveData/scoreboard/todaysScoreboard_00.json");
+      if (!response.ok) throw new Error(`NBA returned ${response.status}`);
       const data = await response.json();
-      const games = Array.isArray(data?.scoreboard?.games) ? data.scoreboard.games : [];
-
-      return games.map(normalizeNBACdnGame);
+      return (Array.isArray(data?.scoreboard?.games) ? data.scoreboard.games : []).map(normalizeNBACdnGame);
     }
 
-    function scoreDisplay(score) {
-      if (score === "" || score == null) {
-        return `<span class="muted-score">—</span>`;
-      }
+    function logoMarkup(url, name) {
+      if (!url) return `<span class="team-logo-fallback" aria-hidden="true">🏀</span>`;
+      return `<img class="team-logo" src="${escapeHTML(url)}" alt="${escapeHTML(name)} logo" loading="lazy" referrerpolicy="no-referrer" />`;
+    }
+
+    function scoreMarkup(score) {
+      if (score === "" || score == null) return `<span class="muted-score">—</span>`;
       return escapeHTML(score);
-    }
-
-    function logoMarkup(url, teamName) {
-      if (!url) {
-        return `<span class="team-logo-fallback" aria-hidden="true">🏀</span>`;
-      }
-
-      return `<img
-        class="team-logo"
-        src="${escapeHTML(url)}"
-        alt="${escapeHTML(teamName)} logo"
-        loading="lazy"
-        referrerpolicy="no-referrer"
-      />`;
     }
 
     function renderGames(games) {
@@ -1166,9 +898,8 @@
         elements.games.innerHTML = `
           <div class="state-card">
             <strong>No NBA games today.</strong>
-            <span>At least the players get a day off. Humanity rarely does.</span>
-          </div>
-        `;
+            <span>At least the players get a day off.</span>
+          </div>`;
         return;
       }
 
@@ -1178,22 +909,16 @@
         return ta - tb;
       });
 
-      elements.nbaSubtitle.textContent =
-        games.length === 1 ? "1 game found" : `${games.length} games found`;
+      elements.nbaSubtitle.textContent = games.length === 1 ? "1 game found" : `${games.length} games found`;
 
       elements.games.innerHTML = games.map((game) => {
         const isLive = game.state === "in";
-        const topTime =
-          game.state === "pre"
-            ? formatLocalTime(game.timeUTC)
-            : game.state === "post"
-              ? "Final"
-              : "Live";
+        const leftTime = game.state === "pre" ? formatLocalTime(game.timeUTC) : game.state === "post" ? "Final" : "Live";
 
         return `
           <article class="game-card">
             <div class="game-topline">
-              <span>${escapeHTML(topTime)}</span>
+              <span>${escapeHTML(leftTime)}</span>
               <span class="status-chip" title="${escapeHTML(game.status)}">
                 ${isLive ? '<span class="live-dot" aria-hidden="true"></span>' : ""}
                 ${escapeHTML(game.status)}
@@ -1206,7 +931,7 @@
                   ${logoMarkup(game.awayLogo, game.awayName)}
                   <span class="team-full">${escapeHTML(game.awayName)}</span>
                 </div>
-                <div class="team-score">${scoreDisplay(game.awayScore)}</div>
+                <div class="team-score">${scoreMarkup(game.awayScore)}</div>
               </div>
 
               <div class="team-row">
@@ -1214,221 +939,167 @@
                   ${logoMarkup(game.homeLogo, game.homeName)}
                   <span class="team-full">${escapeHTML(game.homeName)}</span>
                 </div>
-                <div class="team-score">${scoreDisplay(game.homeScore)}</div>
+                <div class="team-score">${scoreMarkup(game.homeScore)}</div>
               </div>
             </div>
-          </article>
-        `;
+          </article>`;
       }).join("");
-    }
-
-    function renderGamesError() {
-      elements.nbaSubtitle.textContent = "Scores are unavailable right now";
-      elements.games.innerHTML = `
-        <div class="state-card">
-          <strong>Could not load the games right now.</strong>
-          <span>Refresh again in a moment. The layout is ready; the APIs occasionally decide to behave like fog.</span>
-        </div>
-      `;
     }
 
     async function loadNBAGames() {
       elements.nbaSubtitle.textContent = "Refreshing scores...";
-      elements.games.innerHTML = `
-        <div class="state-card">
-          <strong>Loading scores...</strong>
-          <span>Checking available sources.</span>
-        </div>
-      `;
+      elements.games.innerHTML = `<div class="state-card"><strong>Loading scores...</strong><span>Checking available sources.</span></div>`;
 
       try {
-        const espnGames = await fetchGamesFromESPN();
-        renderGames(espnGames);
+        renderGames(await fetchGamesFromESPN());
         return;
-      } catch (espnError) {
-        console.warn("ESPN source failed:", espnError);
+      } catch (error) {
+        console.warn("ESPN source failed:", error);
       }
 
       try {
-        const nbaGames = await fetchGamesFromNBACdn();
-        renderGames(nbaGames);
+        renderGames(await fetchGamesFromNBACdn());
         return;
-      } catch (nbaError) {
-        console.warn("NBA CDN source failed:", nbaError);
+      } catch (error) {
+        console.warn("NBA CDN source failed:", error);
       }
 
-      renderGamesError();
+      elements.nbaSubtitle.textContent = "Scores are unavailable right now";
+      elements.games.innerHTML = `<div class="state-card"><strong>Could not load the games right now.</strong><span>Refresh again in a moment.</span></div>`;
     }
 
-    // ===================
-    // Custom local image
-    // ===================
-    const customImageDBConfig = {
+    const customImageDB = {
       name: "tabora_custom_image_db",
       version: 1,
       store: "images",
       key: "main_custom_image"
     };
-    
+
     let customImageObjectUrl = null;
-    
+
     function openCustomImageDB() {
       return new Promise((resolve, reject) => {
-        const request = indexedDB.open(
-          customImageDBConfig.name,
-          customImageDBConfig.version
-        );
-    
+        const request = indexedDB.open(customImageDB.name, customImageDB.version);
+
         request.onupgradeneeded = () => {
           const db = request.result;
-    
-          if (!db.objectStoreNames.contains(customImageDBConfig.store)) {
-            db.createObjectStore(customImageDBConfig.store, {
-              keyPath: "id"
-            });
+          if (!db.objectStoreNames.contains(customImageDB.store)) {
+            db.createObjectStore(customImageDB.store, { keyPath: "id" });
           }
         };
-    
+
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
     }
-    
+
     async function saveCustomImage(file) {
       const db = await openCustomImageDB();
-    
+
       return new Promise((resolve, reject) => {
-        const transaction = db.transaction(customImageDBConfig.store, "readwrite");
-        const store = transaction.objectStore(customImageDBConfig.store);
-    
-        store.put({
-          id: customImageDBConfig.key,
-          blob: file,
-          name: file.name,
-          type: file.type,
-          updatedAt: Date.now()
-        });
-    
-        transaction.oncomplete = () => {
-          db.close();
-          resolve();
-        };
-    
-        transaction.onerror = () => {
-          db.close();
-          reject(transaction.error);
-        };
+        const transaction = db.transaction(customImageDB.store, "readwrite");
+        const store = transaction.objectStore(customImageDB.store);
+        store.put({ id: customImageDB.key, blob: file, name: file.name, type: file.type, updatedAt: Date.now() });
+
+        transaction.oncomplete = () => { db.close(); resolve(); };
+        transaction.onerror = () => { db.close(); reject(transaction.error); };
       });
     }
-    
+
     async function loadCustomImage() {
       const db = await openCustomImageDB();
-    
+
       return new Promise((resolve, reject) => {
-        const transaction = db.transaction(customImageDBConfig.store, "readonly");
-        const store = transaction.objectStore(customImageDBConfig.store);
-        const request = store.get(customImageDBConfig.key);
-    
-        request.onsuccess = () => {
-          db.close();
-          resolve(request.result || null);
-        };
-    
-        request.onerror = () => {
-          db.close();
-          reject(request.error);
-        };
+        const transaction = db.transaction(customImageDB.store, "readonly");
+        const request = transaction.objectStore(customImageDB.store).get(customImageDB.key);
+
+        request.onsuccess = () => { db.close(); resolve(request.result || null); };
+        request.onerror = () => { db.close(); reject(request.error); };
       });
     }
-    
+
     async function deleteCustomImage() {
       const db = await openCustomImageDB();
-    
+
       return new Promise((resolve, reject) => {
-        const transaction = db.transaction(customImageDBConfig.store, "readwrite");
-        const store = transaction.objectStore(customImageDBConfig.store);
-    
-        store.delete(customImageDBConfig.key);
-    
-        transaction.oncomplete = () => {
-          db.close();
-          resolve();
-        };
-    
-        transaction.onerror = () => {
-          db.close();
-          reject(transaction.error);
-        };
+        const transaction = db.transaction(customImageDB.store, "readwrite");
+        transaction.objectStore(customImageDB.store).delete(customImageDB.key);
+
+        transaction.oncomplete = () => { db.close(); resolve(); };
+        transaction.onerror = () => { db.close(); reject(transaction.error); };
       });
     }
-    
+
     function showCustomImage(record) {
       if (customImageObjectUrl) {
         URL.revokeObjectURL(customImageObjectUrl);
         customImageObjectUrl = null;
       }
-    
-      if (!record || !record.blob) {
+
+      if (!record?.blob) {
+        elements.customImageFrame.classList.remove("has-image");
         elements.customImagePreview.classList.add("hidden");
         elements.customImagePreview.removeAttribute("src");
         elements.customImagePlaceholder.classList.remove("hidden");
         elements.removeCustomImage.classList.add("hidden");
         return;
       }
-    
+
       customImageObjectUrl = URL.createObjectURL(record.blob);
-    
+      elements.customImageFrame.classList.add("has-image");
       elements.customImagePreview.src = customImageObjectUrl;
       elements.customImagePreview.classList.remove("hidden");
       elements.customImagePlaceholder.classList.add("hidden");
       elements.removeCustomImage.classList.remove("hidden");
     }
-    
+
+    async function handleCustomImageFile(file) {
+      if (!file) return;
+
+      if (!file.type.startsWith("image/")) {
+        alert("Please choose a valid image file.");
+        return;
+      }
+
+      const maxSizeMB = 12;
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        alert(`Please choose an image smaller than ${maxSizeMB} MB.`);
+        return;
+      }
+
+      try {
+        await saveCustomImage(file);
+        showCustomImage(await loadCustomImage());
+      } catch (error) {
+        console.error("Could not save custom image:", error);
+        alert("Could not save this image in the browser.");
+      }
+    }
+
     async function initCustomImage() {
       try {
-        const savedImage = await loadCustomImage();
-        showCustomImage(savedImage);
+        showCustomImage(await loadCustomImage());
       } catch (error) {
         console.warn("Could not load custom image:", error);
       }
-    
-      elements.chooseCustomImage.addEventListener("click", () => {
-        elements.customImageInput.click();
+
+      elements.customImageFrame.addEventListener("click", () => elements.customImageInput.click());
+
+      elements.customImageFrame.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          elements.customImageInput.click();
+        }
       });
-    
+
       elements.customImageInput.addEventListener("change", async () => {
-        const file = elements.customImageInput.files?.[0];
-    
-        if (!file) return;
-    
-        if (!file.type.startsWith("image/")) {
-          alert("Please choose a valid image file.");
-          elements.customImageInput.value = "";
-          return;
-        }
-    
-        const maxSizeMB = 12;
-        const maxSizeBytes = maxSizeMB * 1024 * 1024;
-    
-        if (file.size > maxSizeBytes) {
-          alert(`Please choose an image smaller than ${maxSizeMB} MB.`);
-          elements.customImageInput.value = "";
-          return;
-        }
-    
-        try {
-          await saveCustomImage(file);
-          const savedImage = await loadCustomImage();
-          showCustomImage(savedImage);
-        } catch (error) {
-          console.error("Could not save custom image:", error);
-          alert("Could not save this image in the browser.");
-        }
-    
+        await handleCustomImageFile(elements.customImageInput.files?.[0]);
         elements.customImageInput.value = "";
       });
-    
-      elements.removeCustomImage.addEventListener("click", async () => {
+
+      elements.removeCustomImage.addEventListener("click", async (event) => {
+        event.stopPropagation();
+
         try {
           await deleteCustomImage();
           showCustomImage(null);
@@ -1438,10 +1109,7 @@
         }
       });
     }
-    
-    // ============
-    // Initialization
-    // ============
+
     loadWallpaper();
     updateClock();
     initWeather();
