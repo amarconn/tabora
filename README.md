@@ -22,6 +22,11 @@ Live page:
   - Loads a new high-resolution background image each time the page opens.
 - **Responsive layout**
   - Works on desktop resolutions and adapts to narrower windows.
+- **Custom local image card**
+  - Adds a small image card below the NBA scoreboard.
+  - The user can click the `+` button and choose an image directly from the new tab page.
+  - The selected image is saved locally in the browser and appears again when the page is reopened.
+  - The image is not uploaded to GitHub or to this repository.
 
 
 
@@ -180,6 +185,49 @@ The page loads the current day's NBA games and displays:
 
 If the primary score source is unavailable, the page tries a fallback source.
 
+### Custom local image
+
+The page includes a custom image card below the NBA scoreboard.
+
+To use it:
+
+1. Open a new tab.
+2. Find the small image card under the NBA games.
+3. Click the `+` button.
+4. Choose an image from your computer.
+5. The image will stay there after reopening the new tab.
+
+The image is stored only in the user's browser using local browser storage. It is not committed to the repository, uploaded to GitHub, or shared with other users.
+
+If the user clears browser site data, resets the browser profile, or uses another device/browser, the selected image may disappear.
+
+#### Recommended image size
+
+The custom image card uses a square frame.
+
+Recommended image proportions:
+
+```text
+1:1
+```
+
+Recommended image sizes:
+
+```text
+800 x 800 px
+1080 x 1080 px
+```
+
+Other image sizes also work, but non-square images may be cropped to fill the square frame.
+
+The image behavior is controlled with:
+
+```css
+object-fit: cover;
+```
+
+This means the image fills the square without distortion, but some edges can be cropped if the original image is not square.
+
 ### Wallpaper
 
 Each new tab loads a new random high-resolution background image.  
@@ -218,6 +266,19 @@ action="https://www.google.com/search"
 
 with the search URL of another provider.
 
+### Change the custom image card size
+
+The custom image card size is controlled by:
+
+```css
+.custom-image-frame {
+  width: 135px;
+  height: 135px;
+}
+```
+
+To make it larger or smaller, change both values while keeping them equal.
+
 ## Permissions and privacy notes
 
 This page does not require login and does not send data to a custom backend.
@@ -245,7 +306,9 @@ The page relies on external public services for dynamic content:
 
 If one of those services changes its API or temporarily becomes unavailable, the related widget may stop working until the page is updated. Such is life on the modern web, where "public endpoint" often means "working until it suddenly does not."
 
+Recent weather and city data may be cached locally in the browser using `localStorage`.
 
+The custom image is stored locally in the browser. It is not sent to this repository and it does not affect the original project.
 
 ## License
 
